@@ -21,10 +21,13 @@ const Employer = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5001/add-schedule", {
-        employeeName,
-        schedule,
-      });
+      await axios.post(
+        "https://work-schedule-backend-pyongho1-pyongho1s-projects.vercel.app/add-schedule",
+        {
+          employeeName,
+          schedule,
+        }
+      );
       setEmployeeName("");
       setSchedule("");
       alert("Schedule added successfully");

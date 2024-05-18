@@ -7,7 +7,9 @@ const Employee = () => {
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
-        const response = await axios.get("http://localhost:5001/get-schedules");
+        const response = await axios.get(
+          "https://work-schedule-backend-pyongho1-pyongho1s-projects.vercel.app/get-schedules"
+        );
         setSchedules(response.data);
       } catch (error) {
         console.error("Error fetching schedules:", error);
