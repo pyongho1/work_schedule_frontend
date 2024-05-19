@@ -3,7 +3,7 @@ import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
 import { useAuth } from "../AuthContext";
 
 const NavigationBar = () => {
-  const { currentUser, login, logout } = useAuth();
+  const { currentUser, login, logout, role } = useAuth();
 
   return (
     <Navbar bg="light" expand="lg">
@@ -13,15 +13,20 @@ const NavigationBar = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/">Dashboard</Nav.Link>
-            <Nav.Link href="/scheduling">Scheduling</Nav.Link>
-            <Nav.Link href="/time-clock">Time Clock</Nav.Link>
-            <Nav.Link href="/reports">Reports</Nav.Link>
-            <Nav.Link href="/team">Team</Nav.Link>
+            {/* <Nav.Link href="/scheduling">Scheduling</Nav.Link> */}
+            {/* <Nav.Link href="/time-clock">Time Clock</Nav.Link> */}
+            {/* <Nav.Link href="/reports">Reports</Nav.Link> */}
+            {/* <Nav.Link href="/team">Team</Nav.Link> */}
+            {role === "employee" && (
+              <Nav.Link href="/employee">Schedules</Nav.Link>
+            )}
+            {role === "employer" && (
+              <Nav.Link href="/create-schedule">Create Schedule</Nav.Link>
+            )}
           </Nav>
           <Nav>
             {currentUser ? (
               <>
-                <Nav.Link href="/create-schedule">Create Schedule</Nav.Link>
                 <NavDropdown
                   title={currentUser.displayName}
                   id="basic-nav-dropdown"
