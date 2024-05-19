@@ -1,7 +1,10 @@
 import React from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
+import { useAuth } from "../AuthContext";
 
 const NavigationBar = () => {
+  const { currentUser, login, logout } = useAuth();
+
   return (
     <Navbar bg="light" expand="lg">
       <Container>
@@ -16,14 +19,31 @@ const NavigationBar = () => {
             <Nav.Link href="/team">Team</Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Link href="/create-schedule">Create Schedule</Nav.Link>
-            <Nav.Link href="/profile">
-              <img
-                src="https://via.placeholder.com/30"
-                alt="Profile"
-                className="rounded-circle"
-              />
-            </Nav.Link>
+            {currentUser ? (
+              <>
+                <Nav.Link href="/create-schedule">Create Schedule</Nav.Link>
+                <NavDropdown
+                  title={currentUser.displayName}
+                  id="basic-nav-dropdown"
+                >
+                  <NavDropdown.Item onClick={logout}>Log Out</NavDropdown.Item>
+                </NavDropdown>
+                <Nav.Link href="/profile">
+                  <img
+                    src={
+                      currentUser.photoURL || "https://via.placeholder.com/30"
+                    }
+                    alt="Profile"
+                    className="rounded-circle ml-2"
+                    style={{ width: "30px", height: "30px" }} // Add inline styles here
+                  />
+                </Nav.Link>
+              </>
+            ) : (
+              <Button variant="outline-primary" onClick={login}>
+                Log In
+              </Button>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
