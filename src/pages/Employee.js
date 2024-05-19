@@ -4,7 +4,8 @@ import { Container, ListGroup, Card } from "react-bootstrap";
 import { useAuth } from "../AuthContext";
 
 const Employee = () => {
-  const { currentUser, groupCode } = useAuth();
+  // const { currentUser, groupCode } = useAuth();
+  const { groupCode } = useAuth();
   const [schedules, setSchedules] = useState([]);
 
   useEffect(() => {
@@ -24,14 +25,14 @@ const Employee = () => {
     fetchSchedules();
   }, [groupCode]);
 
-  const groupedSchedules = schedules.reduce((acc, schedule) => {
-    const { employeeName, date, time } = schedule;
-    if (!acc[employeeName]) {
-      acc[employeeName] = [];
-    }
-    acc[employeeName].push({ date, time });
-    return acc;
-  }, {});
+  // const groupedSchedules = schedules.reduce((acc, schedule) => {
+  //   const { employeeName, date, time } = schedule;
+  //   if (!acc[employeeName]) {
+  //     acc[employeeName] = [];
+  //   }
+  //   acc[employeeName].push({ date, time });
+  //   return acc;
+  // }, {});
 
   return (
     <>

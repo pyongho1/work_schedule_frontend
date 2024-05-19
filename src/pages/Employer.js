@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
+// import { collection, getDocs } from "firebase/firestore";
+// import { db } from "../firebase";
 import CalendarComponent from "../components/CalendarComponent";
 import {
   Container,
   Form,
-  Button,
+  // Button,
   Row,
   Col,
-  Card,
-  ListGroup,
+  // Card,
+  // ListGroup,
 } from "react-bootstrap";
 import { useAuth } from "../AuthContext";
 
 const Employer = () => {
-  const { currentUser, groupCode } = useAuth();
+  // const { currentUser, groupCode } = useAuth();
+  const { groupCode } = useAuth();
   const [employeeName, setEmployeeName] = useState("");
   const [employees, setEmployees] = useState([]);
-  const [schedules, setSchedules] = useState([]);
+  // const [schedules, setSchedules] = useState([]);
+  const [setSchedules] = useState([]);
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -33,20 +35,7 @@ const Employer = () => {
       }
     };
 
-    const fetchSchedules = async () => {
-      try {
-        const response = await axios.get(
-          // `https://work-schedule-backend-pyongho1-pyongho1s-projects.vercel.app/get-schedules?group=${groupCode}`
-          `https://localhost:5001/get-schedules?group=${groupCode}`
-        );
-        setSchedules(response.data);
-      } catch (error) {
-        console.error("Error fetching schedules:", error);
-      }
-    };
-
     fetchEmployees();
-    fetchSchedules();
   }, [groupCode]);
 
   const handleSaveSchedule = async (schedule) => {

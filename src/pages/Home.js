@@ -3,7 +3,8 @@ import { useAuth } from "../AuthContext";
 import { Container } from "react-bootstrap";
 
 const Home = () => {
-  const { currentUser, role, groupCode } = useAuth();
+  // const { currentUser, role, groupCode } = useAuth();
+  const { role, groupCode } = useAuth();
 
   return (
     <>
