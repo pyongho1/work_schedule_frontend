@@ -2,14 +2,23 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
-import { Container, Form, Button, Row, Col } from "react-bootstrap";
+import CalendarComponent from "../components/CalendarComponent";
+import {
+  Container,
+  Form,
+  Button,
+  Row,
+  Col,
+  Card,
+  ListGroup,
+} from "react-bootstrap";
 import { useAuth } from "../AuthContext";
 
 const Employer = () => {
   const { currentUser, groupCode } = useAuth();
   const [employeeName, setEmployeeName] = useState("");
-  const [schedule, setSchedule] = useState("");
   const [employees, setEmployees] = useState([]);
+  const [schedules, setSchedules] = useState([]);
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -24,11 +33,23 @@ const Employer = () => {
       }
     };
 
+    const fetchSchedules = async () => {
+      try {
+        const response = await axios.get(
+          // `https://work-schedule-backend-pyongho1-pyongho1s-projects.vercel.app/get-schedules?group=${groupCode}`
+          `https://localhost:5001/get-schedules?group=${groupCode}`
+        );
+        setSchedules(response.data);
+      } catch (error) {
+        console.error("Error fetching schedules:", error);
+      }
+    };
+
     fetchEmployees();
+    fetchSchedules();
   }, [groupCode]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSaveSchedule = async (schedule) => {
     try {
       await axios.post(
         // "https://work-schedule-backend-pyongho1-pyongho1s-projects.vercel.app/add-schedule",
@@ -40,18 +61,42 @@ const Employer = () => {
         }
       );
       setEmployeeName("");
-      setSchedule("");
       alert("Schedule added successfully");
+      const response = await axios.get(
+        // `https://work-schedule-backend-pyongho1-pyongho1s-projects.vercel.app/get-schedules?group=${groupCode}`
+        `https://localhost:5001/get-schedules?group=${groupCode}`
+      );
+      setSchedules(response.data); // Update schedules after adding new one
     } catch (error) {
       console.error("Error adding schedule:", error);
     }
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     await axios.post(
+  //       // "https://work-schedule-backend-pyongho1-pyongho1s-projects.vercel.app/add-schedule",
+  //       "http://localhost:5001/add-schedule",
+  //       {
+  //         employeeName,
+  //         schedule,
+  //         group: groupCode,
+  //       }
+  //     );
+  //     setEmployeeName("");
+  //     setSchedule("");
+  //     alert("Schedule added successfully");
+  //   } catch (error) {
+  //     console.error("Error adding schedule:", error);
+  //   }
+  // };
+
   return (
     <>
       <Container>
         <h1 className="my-4">Employer Page</h1>
-        <Form onSubmit={handleSubmit}>
+        <Form>
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm={2}>
               Employee Name
@@ -73,22 +118,24 @@ const Employer = () => {
               </Form.Select>
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="mb-3">
-            <Form.Label column sm={2}>
-              Schedule
-            </Form.Label>
-            <Col sm={10}>
-              <Form.Control
-                type="text"
-                placeholder="Schedule"
-                value={schedule}
-                onChange={(e) => setSchedule(e.target.value)}
-                required
-              />
-            </Col>
-          </Form.Group>
-          <Button type="submit">Add Schedule</Button>
         </Form>
+        <CalendarComponent onSave={handleSaveSchedule} />
+        {/* <Container>
+          {schedules.map((scheduleItem, index) => (
+            <Card key={index} className="mb-3">
+              <Card.Header>{scheduleItem.employeeName}</Card.Header>
+              <Card.Body>
+                <ListGroup>
+                  {scheduleItem.schedule.map((schedule, idx) => (
+                    <ListGroup.Item key={idx}>
+                      {schedule.date} - {schedule.time}
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              </Card.Body>
+            </Card>
+          ))}
+        </Container> */}
       </Container>
     </>
   );
