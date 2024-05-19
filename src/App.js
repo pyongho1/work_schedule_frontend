@@ -9,27 +9,31 @@ import Employer from "./pages/Employer";
 import Employee from "./pages/Employee";
 // import Login from "./Login";
 import Login from "./pages/Login";
+import NavigationBar from "./components/NavBar";
 
 const App = () => {
   const { currentUser } = useAuth();
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        {/* <Route path="/employer" element={<Employer />} /> */}
-        <Route
-          path="/employer"
-          element={currentUser ? <Employer /> : <Login />}
-        />
-        <Route
-          path="/employee"
-          element={currentUser ? <Employee /> : <Login />}
-        />
-        {/* <Route path="/employee" element={<Employee />} /> */}
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </Router>
+    <>
+      <NavigationBar />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          {/* <Route path="/employer" element={<Employer />} /> */}
+          <Route
+            path="/employer"
+            element={currentUser ? <Employer /> : <Login />}
+          />
+          <Route
+            path="/employee"
+            element={currentUser ? <Employee /> : <Login />}
+          />
+          {/* <Route path="/employee" element={<Employee />} /> */}
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </Router>
+    </>
   );
 };
 
