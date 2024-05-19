@@ -1,29 +1,24 @@
 import React from "react";
-import NavigationBar from "../components/NavBar";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { useAuth } from "../AuthContext";
+import { Container } from "react-bootstrap";
 
 const Home = () => {
+  const { currentUser, role, groupCode } = useAuth();
+
   return (
     <>
       <Container>
-        <h1 className="my-4">Schedules</h1>
-        <h3>Today</h3>
-        <Row>
-          {["Front Desk", "Front Desk", "Front Desk", "Front Desk"].map(
-            (role, index) => (
-              <Col md={6} lg={4} key={index} className="mb-3">
-                <Card>
-                  <Card.Body>
-                    <Card.Title>{role}</Card.Title>
-                    <Card.Text>
-                      <i className="bi bi-calendar"></i> 8:00 AM - 5:00 PM
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            )
-          )}
-        </Row>
+        <h1 className="my-4">Dashboard</h1>
+        {role === "employer" && (
+          <div className="alert alert-info">
+            <h4>Your Group Code: {groupCode}</h4>
+            <p>
+              Share this code with your employees to allow them to join your
+              group.
+            </p>
+          </div>
+        )}
+        {/* Rest of your dashboard content */}
       </Container>
     </>
   );
