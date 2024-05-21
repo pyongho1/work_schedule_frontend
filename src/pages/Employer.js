@@ -28,10 +28,9 @@ const Employer = () => {
         const response = await axios.get(
           `https://work-schedule-backend-pyongho1-pyongho1s-projects.vercel.app/get-employees?group=${groupCode}`
         );
-        const response = await axios
-          .get
-          // `http://localhost:5001/get-employees?group=${groupCode}`
-          ();
+        // const response = await axios.get(
+        //   `http://localhost:5001/get-employees?group=${groupCode}`
+        // );
         setEmployees(response.data);
       } catch (error) {
         console.error("Error fetching employees:", error);
@@ -45,12 +44,17 @@ const Employer = () => {
     try {
       await axios.post(
         "https://work-schedule-backend-pyongho1-pyongho1s-projects.vercel.app/add-schedule",
-        // "http://localhost:5001/add-schedule",
         {
           employeeName,
           schedule,
           group: groupCode,
         }
+        // "http://localhost:5001/add-schedule",
+        // {
+        //   employeeName,
+        //   schedule,
+        //   group: groupCode,
+        // }
       );
       setEmployeeName("");
       alert("Schedule added successfully");
