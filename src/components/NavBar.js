@@ -21,7 +21,7 @@ const NavigationBar = () => {
               <Nav.Link href="/employee">Schedules</Nav.Link>
             )}
             {role === "employer" && (
-              <Nav.Link href="/create-schedule">Create Schedule</Nav.Link>
+              <Nav.Link href="/employer">Create Schedule</Nav.Link>
             )}
           </Nav>
           <Nav>
