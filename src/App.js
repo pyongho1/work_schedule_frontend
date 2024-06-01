@@ -13,6 +13,8 @@ import Login from "./pages/Login";
 import RoleSelection from "./components/RoleSelection";
 import { useAuth } from "./AuthContext";
 import NavigationBar from "./components/NavBar";
+import EmployeeAvailability from "./components/EmployeeAvailability";
+import AdminSchedule from "./components/AdminSchedule";
 
 const App = () => {
   const { currentUser, role, loading } = useAuth();
@@ -73,6 +75,11 @@ const App = () => {
               )
             }
           />
+          <Route
+            path="/employee-availability"
+            element={<EmployeeAvailability />}
+          />
+          <Route path="/admin-schedule" element={<AdminSchedule />} />
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<Navigate to="/" />} />{" "}
           {/* Catch-all route */}
