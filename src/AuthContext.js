@@ -1,7 +1,16 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth, provider } from "./firebase";
 import { signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+// import { doc, setDoc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "./firebase";
 import { v4 as uuidv4 } from "uuid";
 
@@ -19,6 +28,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setLoading(true); // Start loading when user state changes
       if (user) {
         setCurrentUser(user);
         const userRef = doc(db, "users", user.uid);
@@ -39,7 +49,7 @@ export const AuthProvider = ({ children }) => {
         setRole(null);
         setGroupCode(null);
       }
-      setLoading(false);
+      setLoading(false); // Stop loading after user data is fetched
     });
     return unsubscribe;
   }, []);
@@ -56,7 +66,21 @@ export const AuthProvider = ({ children }) => {
 
   const setRoleAndGroup = async (user, role, groupCode = null) => {
     const userRef = doc(db, "users", user.uid);
-    const group = role === "employer" ? uuidv4() : groupCode;
+    let group = groupCode;
+
+    if (role === "employer") {
+      group = uuidv4();
+    } else {
+      // Check if the group code exists
+      const groupQuery = query(
+        collection(db, "users"),
+        where("group", "==", groupCode)
+      );
+      const groupSnapshot = await getDocs(groupQuery);
+      if (groupSnapshot.empty) {
+        throw new Error("Group code does not exist");
+      }
+    }
 
     await setDoc(userRef, {
       uid: user.uid,

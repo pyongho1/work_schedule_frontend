@@ -12,8 +12,8 @@ const Employee = () => {
     const fetchSchedules = async () => {
       try {
         const response = await axios.get(
-          `https://work-schedule-backend.vercel.app/get-schedules?group=${groupCode}`
-          // `http://localhost:5001/get-schedules?group=${groupCode}`
+          // `https://work-schedule-backend.vercel.app/get-schedules?group=${groupCode}`
+          `http://localhost:5001/get-schedules?group=${groupCode}`
         );
         console.log("Fetched Schedules:", response.data);
         setSchedules(response.data);

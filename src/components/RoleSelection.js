@@ -1,62 +1,61 @@
 import React, { useState } from "react";
 import { useAuth } from "../AuthContext";
-import { Container, Button, Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Container, Button, Form, Alert } from "react-bootstrap";
+// import { useNavigate } from "react-router-dom";
 
 const RoleSelection = () => {
   const { currentUser, setRoleAndGroup } = useAuth();
   const [role, setRole] = useState("");
-  const [groupCodeInput, setGroupCodeInput] = useState("");
-  const navigate = useNavigate();
+  // const [groupCodeInput, setGroupCodeInput] = useState("");
+  const [groupCode, setGroupCode] = useState("");
+  const [error, setError] = useState("");
+  // const navigate = useNavigate();
 
-  const handleRoleSelection = async () => {
-    if (role === "employee" && !groupCodeInput) {
-      alert("Please enter a valid group code.");
-      return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      await setRoleAndGroup(currentUser, role, groupCode);
+      // Navigate to the dashboard or appropriate page
+    } catch (err) {
+      setError(err.message);
     }
-    await setRoleAndGroup(currentUser, role, groupCodeInput);
-    navigate("/dashboard");
   };
 
   return (
-    <Container className="text-center my-5">
-      <h1>Welcome, {currentUser.displayName}!</h1>
-      <p>Please select your role:</p>
-      <Form>
-        <Form.Check
-          type="radio"
-          label="Employer"
-          name="role"
-          value="employer"
-          onChange={(e) => setRole(e.target.value)}
-        />
-        <Form.Check
-          type="radio"
-          label="Employee"
-          name="role"
-          value="employee"
-          onChange={(e) => setRole(e.target.value)}
-        />
+    <Container>
+      <h1>Select Role</h1>
+      {error && <Alert variant="danger">{error}</Alert>}
+      <Form onSubmit={handleSubmit}>
+        <Form.Group>
+          <Form.Label>Role</Form.Label>
+          <Form.Control
+            as="select"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            required
+          >
+            <option value="" disabled>
+              Select your role
+            </option>
+            <option value="employer">Employer</option>
+            <option value="employee">Employee</option>
+          </Form.Control>
+        </Form.Group>
         {role === "employee" && (
-          <Form.Group className="my-3">
+          <Form.Group>
+            <Form.Label>Group Code</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter group code"
-              value={groupCodeInput}
-              onChange={(e) => setGroupCodeInput(e.target.value)}
+              value={groupCode}
+              onChange={(e) => setGroupCode(e.target.value)}
+              required
             />
           </Form.Group>
         )}
-        <Button
-          onClick={handleRoleSelection}
-          variant="primary"
-          className="mt-3"
-        >
-          Submit
-        </Button>
+        <Button type="submit">Submit</Button>
       </Form>
     </Container>
   );
 };
-
 export default RoleSelection;

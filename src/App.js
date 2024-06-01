@@ -21,7 +21,11 @@ const App = () => {
   console.log("App.js - role:", role);
   console.log("App.js - loading:", loading);
 
-  if (loading || (currentUser && role === null)) {
+  // if (loading || (currentUser && role === null)) {
+  //   return <div>Loading...</div>; // Display loading indicator while fetching user data
+  // }
+
+  if (loading) {
     return <div>Loading...</div>; // Display loading indicator while fetching user data
   }
   return (
