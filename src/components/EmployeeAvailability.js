@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import { useAuth } from "../AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const EmployeeAvailability = () => {
   const { currentUser, groupCode } = useAuth();
-  const [employeeName, setEmployeeName] = useState("");
+  const navigate = useNavigate();
   const [availability, setAvailability] = useState({
     monday: { start: "", end: "" },
     tuesday: { start: "", end: "" },
@@ -36,6 +37,7 @@ const EmployeeAvailability = () => {
         group: groupCode,
       });
       alert("Availability submitted successfully");
+      navigate("/employee-dashboard"); // Redirect to employee dashboard
     } catch (error) {
       console.error("Error submitting availability", error);
     }

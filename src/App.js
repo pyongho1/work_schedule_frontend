@@ -15,6 +15,7 @@ import { useAuth } from "./AuthContext";
 import NavigationBar from "./components/NavBar";
 import EmployeeAvailability from "./components/EmployeeAvailability";
 import AdminSchedule from "./components/AdminSchedule";
+import EmployeeDashboard from "./pages/EmployeeDashboard";
 
 const App = () => {
   const { currentUser, role, loading } = useAuth();
@@ -77,7 +78,25 @@ const App = () => {
           />
           <Route
             path="/employee-availability"
-            element={<EmployeeAvailability />}
+            element={
+              !currentUser ||
+              role !== "employee" ||
+              currentUser.availability ? (
+                <Navigate to="/employee-dashboard" />
+              ) : (
+                <EmployeeAvailability />
+              )
+            }
+          />
+          <Route
+            path="/employee-dashboard"
+            element={
+              !currentUser || role !== "employee" ? (
+                <Navigate to="/" />
+              ) : (
+                <EmployeeDashboard />
+              )
+            }
           />
           <Route path="/admin-schedule" element={<AdminSchedule />} />
           <Route path="/login" element={<Login />} />
